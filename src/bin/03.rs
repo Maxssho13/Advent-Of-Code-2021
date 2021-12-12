@@ -1,6 +1,6 @@
 fn main() {
     let input = String::from_utf8(std::fs::read("inputs/03.txt").unwrap()).unwrap();
-    let num_bits = input.split_once("\n").unwrap().0.len();
+    let num_bits = input.split_once('\n').unwrap().0.len();
 
     let mut bit_counts: Vec<usize> = vec![0; num_bits];
 
