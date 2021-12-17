@@ -20,21 +20,21 @@ fn main() {
         })
         .collect();
 
-    'outer: for number in called_numbers {
+    for number in called_numbers {
         boards.iter_mut().for_each(|board| {
             board.call_number(number);
         });
 
-        for i in (0..boards.len()).rev() {
-            if boards.len() == 1 && boards[0].found_bingo {
-                let sum = boards[0].sum_uncalled();
+        let removed_boards = boards.drain_filter(|board| board.found_bingo);
+
+        match removed_boards.last() {
+            Some(last_board) if boards.is_empty() => {
+                let sum = last_board.sum_uncalled();
                 let output = sum * number;
                 println!("last bingo: {}", output);
-                break 'outer;
+                break;
             }
-            if boards.len() > 1 && boards[i].found_bingo {
-                boards.remove(i);
-            }
+            _ => {}
         }
     }
 }
