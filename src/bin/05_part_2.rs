@@ -29,19 +29,27 @@ fn main() {
                     increment_point((i, j));
                 }
             }
-        } else if x1 > x2 {
-            if y1 > y2 {
-                (x2..=x1)
-                    .rev()
-                    .zip((y2..=y1).rev())
-                    .for_each(increment_point);
-            } else {
-                (x2..=x1).rev().zip(y1..=y2).for_each(increment_point);
-            }
-        } else if y1 > y2 {
-            (x1..=x2).zip((y2..=y1).rev()).for_each(increment_point);
         } else {
-            (x1..=x2).zip(y1..=y2).for_each(increment_point);
+            let x_iter: Box<dyn Iterator<Item = usize>>;
+            let y_iter: Box<dyn Iterator<Item = usize>>;
+
+            if x1 > x2 {
+                x_iter = Box::new((x2..=x1).rev());
+                if y1 > y2 {
+                    y_iter = Box::new((y2..=y1).rev());
+                } else {
+                    y_iter = Box::new(y1..=y2);
+                }
+            } else {
+                x_iter = Box::new(x1..=x2);
+                if y1 > y2 {
+                    y_iter = Box::new((y2..=y1).rev());
+                } else {
+                    y_iter = Box::new(y1..=y2);
+                }
+            }
+
+            x_iter.zip(y_iter).for_each(increment_point);
         }
     });
 
